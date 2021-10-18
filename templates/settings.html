@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Settings</h2>
+
+<h3>Your ID:</h3> {{ user['user_id'] }}
+
+<h3>Your Username:</h3> {{ user['user_username'] }}
+
+<h3>Your mail:</h3> {{ user['user_mail'] }}
+
+<h3>Your status:</h3> {{ user['user_allowed'] }}
+
+<h3>Your name:</h3> {{ user['user_name'] }}
+
+<form action="/settings/upname" method="post">
+    <label for="name">New name:</label>
+    <input name="name" id="name" required>
+    <input type="submit" value="Update">
+</form>
+
+<h3>Your description:</h3> {{ user['user_description'] }}
+
+<form action="/settings/updes" method="post">
+    <label for="description">New description:</label>
+    <textarea name="description" id="description" cols="30" rows="4"></textarea>
+    <input type="submit" value="Update">
+</form>
+
+<h3>Password:</h3>
+
+<form action="/settings/uppass" method="post">
+    <label for="oldpass">Old password:</label>
+    <input type="password" name="oldpass" id="oldpass" required>
+    <label for="newpass">New password:</label>
+    <input type="password" name="newpass" id="newpass" required>
+    <input type="submit" value="Update">
+</form>
+
+<h3>Your custom profile CSS:</h3> 
+
+<form action="/settings/upcss" method="post">
+    <label for="css">New css:</label>
+    <textarea name="css" id="css" cols="30" rows="4">{{ user['custom_css'] }}</textarea>
+    <input type="submit" value="Update">
+</form>
+
+{% endblock %}

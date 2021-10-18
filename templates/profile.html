@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style> {{user.custom_css}} </style>
+
+<header class="gh-header gh-canvas gh-title">
+    <h1> {{ user.user_name }} </h1>
+    <h1> (@{{ user.user_username }}) </h1>
+</header>
+
+<div class="abstract">
+    <h2>Description</h2>
+    <p>{{ user.user_description }}</p>
+
+    <div class="gh-author-links" style="text-align-last: center;">
+      <a href="">{{ followers }} followers!</a>
+      <a href="">{{ following }} following!</a>
+  </div>
+
+  {% if g.user %}{% if g.user['user_username'] != user.user_username %}
+  <div class="gh-author-links" style="text-align-last: center;">
+    <a href="{{ url_for('interface.follow', page=user.user_username) }}">{% if follows == 0 %}
+      Follow {% else %} Unfollow
+    {% endif %}</a> or
+    <a href="{{ url_for('interface.block', page=user.user_username) }}">{% if blocks == 0 %}
+      Block {% else %} Unblock
+    {% endif %}</a>
+  </div>  {% endif %}{% endif %}
+</div>
+
+<div class="gh-postfeed">
+    <h2>Posts</h2>
+    {% for post in posts %}
+    <article class="post">
+      <header>
+        <div>
+          {% set tup = g.db.execute("select user_name, user_username from USER where user_id = {}".format(post['user_id'] )).fetchone() %}
+          <div class="about">by <a href="{{ url_for('interface.profile', page=tup[1]) }}">{{ "{} (@{})".format(* tup ) }}</a> on {{ post['post_date'].strftime('%Y-%m-%d') }}</div>
+        </div>
+        {% if g.user['user_id'] == post['user_id'] %}
+          {% if g.user['user_id'] == post['user_id'] %}
+          <a href="{{ url_for('interface.delete', post=post['post_id']) }}">Delete me.</a> or
+          {% endif %}
+        {% endif %} <a href="{{ url_for('interface.repost', post_id=post['post_id']) }}">Repost.</a>
+
+        {% if post['post_is_repost'] == 1 %}{% set a = g.db.execute("select post_text, user_id from POST where post_id = {}".format(post['post_father_id'] )).fetchone()  %}{% set b = g.db.execute("select user_username from USER where user_id = {}".format(a[1])).fetchone()[0] %}<div class="repost">&gt;{{a[0]}} — @<a href="{{ url_for('interface.profile', page=b) }}">{{ b }}</a></div> {% endif %}
+      </header>
+      <p class="body">{{ post['post_text'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+
+</div>
+
+
+{% endblock %}

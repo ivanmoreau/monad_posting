@@ -1,0 +1,4 @@
+include monad_posting/static/vars.css
+graft monad_posting/static
+graft monad_posting/templates
+global-exclude *.pyc

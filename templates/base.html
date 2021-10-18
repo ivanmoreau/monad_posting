@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&gt;monad-posting</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='latex.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='screen.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='katex.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='copy-tex.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='prism-xonokai.css') }}" />
+    <style>.repost {
+        padding-left: 3em;
+        font-style: italic;
+    }</style>
+</head>
+<body>
+    <header>
+        <h1>
+            <a class="gh-head-logo" href="/">
+                <h1>&gt;monad-posting</h1>
+            </a>
+        </h1>
+        <div class="gh-head-menu">
+            <ul class="nav">
+                <li class="nav-home nav-current"><a href="/">Home</a></li>
+                {% if g.user %}
+                <li class="nav-author"><a href="{{ url_for('interface.profile', page=g.user['user_username']) }}">{{ g.user['user_name'] }}'s Profile</a></li>
+                <li class="nav-author"><a href="/settings">Settings</a></li>
+                <li class="nav-author"><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                {% else %}
+                <li class="nav-author"><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                <li class="nav-author"><a href="{{ url_for('auth.register') }}">Register</a></li>
+                {% endif %}
+                </ul>
+        </div>
+    </header>
+
+<hr>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    <hr>
+  {% endif %}
+{% endwith %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <hr>
+    <div class="foot">
+        <div class="copyright">
+            <a class="" href="/">
+                &gt;monad-posting - Iván Molina Rebolledo
+            </a> © 2021
+        </div>
+        <div class="info">
+            Published with <a href="https://ghost.org" target="_blank" rel="noopener">Flask + MariaDB + SQLAlchemy</a> <br>
+            Theme based on <a href="https://latex.now.sh/" target="_blank" rel="noopener">LaTeX.css</a> for <a href="https://ivmoreau.com">This Blog Is Provided "as Is", Without Warranty Of Any Kind</a>
+        </div>
+    </div>
+</footer>
+
+<script defer src="{{ url_for('static', filename='katex.min.js') }}"> </script>
+<script defer src="{{ url_for('static', filename='auto-render.min.js') }}" onload="renderMathInElement(document.body);"></script>
+<script defer src="{{ url_for('static', filename='copy-tex.min.js') }}"> </script>
+<script defer src="{{ url_for('static', filename='prism.js') }}"> </script>
+
+
+
+</body>
+</html>
